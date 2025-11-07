@@ -1,0 +1,39 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="512" height="512" fill="#1B4332" rx="80" ry="80"/>
+  
+  <!-- Coffee Cup + Steam -->
+  <g transform="translate(120, 100)">
+    <!-- Cup Body -->
+    <rect x="60" y="100" width="120" height="120" rx="20" fill="#FFFFFF"/>
+    <!-- Cup Handle -->
+    <ellipse cx="200" cy="160" rx="25" ry="20" fill="none" stroke="#FFFFFF" stroke-width="10"/>
+    <!-- Steam -->
+    <path d="M 100 80 Q 110 60, 120 80" stroke="#FFFFFF" stroke-width="4" fill="none" opacity="0.8"/>
+    <path d="M 130 75 Q 140 55, 150 75" stroke="#FFFFFF" stroke-width="3" fill="none" opacity="0.8"/>
+    <path d="M 160 80 Q 170 60, 180 80" stroke="#FFFFFF" stroke-width="4" fill="none" opacity="0.8"/>
+  </g>
+  
+  <!-- Clock (Attendance) -->
+  <g transform="translate(300, 100)">
+    <circle cx="50" cy="50" r="50" fill="none" stroke="#FFFFFF" stroke-width="6"/>
+    <circle cx="50" cy="50" r="3" fill="#FFFFFF"/>
+    <line x1="50" y1="50" x2="50" y2="25" stroke="#FFFFFF" stroke-width="4"/>
+    <line x1="50" y1="50" x2="75" y2="50" stroke="#FFFFFF" stroke-width="5"/>
+  </g>
+  
+  <!-- Brand elements -->
+  <g transform="translate(256, 350)">
+    <!-- Central coffee bean -->
+    <ellipse cx="0" cy="0" rx="30" ry="40" fill="#52B788"/>
+    <path d="M -10 0 Q 0 -15, 10 0" stroke="#1B4332" stroke-width="3" fill="none"/>
+    <!-- Side beans -->
+    <ellipse cx="-60" cy="0" rx="20" ry="30" fill="#52B788" opacity="0.7"/>
+    <ellipse cx="60" cy="0" rx="20" ry="30" fill="#52B788" opacity="0.7"/>
+  </g>
+  
+  <!-- Decorative elements -->
+  <circle cx="120" cy="350" r="8" fill="#52B788" opacity="0.6"/>
+  <circle cx="392" cy="350" r="8" fill="#52B788" opacity="0.6"/>
+  <circle cx="256" cy="420" r="6" fill="#52B788" opacity="0.4"/>
+</svg>

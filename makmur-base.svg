@@ -1,0 +1,28 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="512" height="512" fill="#1B4332" rx="80" ry="80"/>
+  
+  <!-- MAKMUR Text with 3D Effect -->
+  <!-- Shadow Layer -->
+  <text x="256" y="290" font-family="Arial, sans-serif" font-size="96" font-weight="900" 
+        text-anchor="middle" fill="#0D2818" transform="translate(8,8)">MAKMUR</text>
+  
+  <!-- Main Text -->
+  <text x="256" y="280" font-family="Arial, sans-serif" font-size="96" font-weight="900" 
+        text-anchor="middle" fill="#FFFFFF">MAKMUR</text>
+  
+  <!-- Subtitle: KOPI -->
+  <text x="256" y="180" font-family="Arial, sans-serif" font-size="32" font-weight="600" 
+        text-anchor="middle" fill="#52B788" opacity="0.9">KOPI</text>
+  
+  <!-- Coffee Bean Icon -->
+  <g transform="translate(200, 120)">
+    <ellipse cx="30" cy="15" rx="25" ry="15" fill="#2D6A4F"/>
+    <path d="M 15 10 Q 30 5, 45 10" stroke="#1B4332" stroke-width="2" fill="none"/>
+  </g>
+  
+  <g transform="translate(240, 120)">
+    <ellipse cx="30" cy="15" rx="25" ry="15" fill="#2D6A4F"/>
+    <path d="M 15 10 Q 30 5, 45 10" stroke="#1B4332" stroke-width="2" fill="none"/>
+  </g>
+</svg>

@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Sistem Absen Kehadiran Barista - Kopi Toko Makmur</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Aplikasi absen kehadiran untuk barista Kopi Toko Makmur">
+    <meta name="theme-color" content="#1B4332">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Kopi Toko Makmur">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Kopi Toko Makmur">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Apple Icons -->
+    <link rel="apple-touch-icon" href="icons/makmur-pwa-192x192.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="icons/makmur-pwa-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="icons/makmur-pwa-192x192.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="icons/makmur-pwa-152x152.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="icons/icon-16x16.png">
+    <link rel="shortcut icon" href="favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            500: '#1B4332',
+                            700: '#0B3D2E',
+                            100: '#E8F5E8',
+                        },
+                        secondary: {
+                            500: '#52B788',
+                            700: '#40916C',
+                            100: '#D8F3DC',
+                        },
+                        accent: {
+                            500: '#95D5B2',
+                            700: '#74C69D',
+                            100: '#F1FAEE',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+        
+        .attendance-card {
+            transition: all 300ms cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        
+        .attendance-card:hover {
+            transform: translateY(-4px) scale(1.02);
+        }
+        
+        .main-action-btn {
+            transition: all 200ms ease-in-out;
+        }
+        
+        .main-action-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .main-action-btn:active {
+            transform: scale(0.98);
+        }
+        
+        /* Coffee Shop Theme */
+        .coffee-gradient {
+            background: linear-gradient(135deg, #1B4332 0%, #52B788 100%);
+        }
+        
+        .coffee-card {
+            background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+            border: 1px solid rgba(27, 67, 50, 0.1);
+        }
+        
+        .coffee-pattern {
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(82, 183, 136, 0.1) 0%, transparent 25%),
+                radial-gradient(circle at 75% 75%, rgba(27, 67, 50, 0.05) 0%, transparent 25%);
+        }
+        
+        /* Coffee Cup Animation */
+        @keyframes steam {
+            0% { opacity: 0; transform: translateY(0) scale(1); }
+            50% { opacity: 0.7; }
+            100% { opacity: 0; transform: translateY(-20px) scale(1.5); }
+        }
+        
+        .steam {
+            animation: steam 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-inter">
+    <!-- Login Screen -->
+    <div id="loginScreen" class="min-h-screen flex items-center justify-center p-4">
+        <div class="w-full max-w-md">
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+                <div class="text-center mb-8">
+                    <!-- Coffee Shop Logo -->
+                    <div class="w-20 h-20 bg-primary-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                        <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <!-- Coffee Cup -->
+                            <path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zm3-3V6a2 2 0 0 1 2-2h1v4h-1z"/>
+                            <!-- Coffee Bean -->
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                            <path d="M18 11h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1h-1z"/>
+                        </svg>
+                    </div>
+                    <h1 class="text-3xl font-bold text-primary-500 mb-2">Kopi Toko Makmur</h1>
+                    <p class="text-gray-600 font-medium">Sistem Absen Kehadiran Barista</p>
+                    <p class="text-sm text-gray-500 mt-1">Aplikasi absensi khusus untuk Staff Barista</p>
+                </div>
+                
+                <form id="loginForm" class="space-y-6">
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+                        <input 
+                            type="text" 
+                            id="username" 
+                            required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
+                            placeholder="Masukkan username"
+                        >
+                    </div>
+                    
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
+                            placeholder="Masukkan password"
+                        >
+                    </div>
+                    
+                    <button 
+                        type="submit"
+                        class="w-full bg-primary-500 text-white py-3 px-4 rounded-xl font-semibold hover:bg-primary-700 transition-all duration-200 transform shadow-md hover:shadow-lg"
+                    >
+                        Masuk ke Sistem
+                    </button>
+                </form>
+                
+                <div class="mt-6 p-4 bg-accent-100 rounded-xl border border-accent-500/20">
+                    <p class="text-sm text-primary-700 mb-2 font-medium">Demo Akses:</p>
+                    <p class="text-xs text-primary-600">Manager: manager / cafe123</p>
+                    <p class="text-xs text-primary-600">Barista: barista1 / cafe123</p>
+                    <p class="text-xs text-primary-600">Barista: barista2 / cafe123</p>
+                </div>
+
+                <!-- PWA Install Banner -->
+                <div id="installBanner" class="hidden mt-4 p-4 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-xl text-white">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-sm">Install App</h4>
+                            <p class="text-xs opacity-90">Tambahkan ke Home Screen untuk akses cepat</p>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button id="installBtn" class="bg-white text-primary-500 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors">
+                                Install
+                            </button>
+                            <button id="dismissInstall" class="text-white/80 px-2 py-2 hover:text-white transition-colors">
+                                ✕
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="mainApp" class="hidden min-h-screen">
+        <!-- Header -->
+        <header class="bg-white border-b border-gray-200 px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <button id="menuToggle" class="p-2 rounded-lg hover:bg-gray-100 md:hidden">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-primary-500 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-semibold text-primary-500">Kopi Toko Makmur</h1>
+                            <p class="text-sm text-gray-500">Absen Barista</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="hidden md:block text-right">
+                        <p class="text-sm font-medium text-gray-900" id="userName">Loading...</p>
+                        <p class="text-xs text-gray-500" id="userRole">Loading...</p>
+                    </div>
+                    <button id="logoutBtn" class="p-2 rounded-lg hover:bg-gray-100 text-gray-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex">
+            <!-- Sidebar -->
+            <nav id="sidebar" class="w-60 bg-white border-r border-gray-200 min-h-screen p-4 hidden md:block">
+                <div class="space-y-2">
+                    <button data-section="dashboard" class="nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left hover:bg-gray-100 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2 2v0"></path>
+                        </svg>
+                        <span>Dashboard</span>
+                    </button>
+                    
+                    <button data-section="attendance" class="nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left hover:bg-gray-100 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span>Absen</span>
+                    </button>
+                    
+                    <button data-section="leave" class="nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left hover:bg-gray-100 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        <span>Manajemen Cuti</span>
+                    </button>
+                    
+                    <button data-section="reports" class="nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left hover:bg-gray-100 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        <span>Laporan</span>
+                    </button>
+                    
+                    <div class="admin-only hidden">
+                        <hr class="my-4">
+                        <p class="px-4 text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Management</p>
+                        
+                        <button data-section="users" class="nav-item w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left hover:bg-gray-100 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                            </svg>
+                            <span>Kelola Staff</span>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="flex-1 p-6">
+                <!-- Dashboard Section -->
+                <div id="dashboard" class="section">
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-bold text-primary-500 mb-2">Dashboard</h2>
+                        <p class="text-gray-600" id="greeting">Selamat datang di sistem absen Kopi Toko Makmur</p>
+                    </div>
+                    
+                    <!-- Attendance Status -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="attendance-card glass-effect rounded-2xl p-6 shadow-lg">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-600">Status Absen Hari Ini</p>
+                                    <p class="text-2xl font-bold text-gray-900" id="todayStatus">Belum Absen</p>
+                                </div>
+                                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="attendance-card glass-effect rounded-2xl p-6 shadow-lg">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-600">Jam Kerja Bulan Ini</p>
+                                    <p class="text-2xl font-bold text-gray-900" id="monthlyHours">0 jam</p>
+                                </div>
+                                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="attendance-card glass-effect rounded-2xl p-6 shadow-lg">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-600">Sisa Cuti</p>
+                                    <p class="text-2xl font-bold text-gray-900" id="remainingLeave">12 hari</p>
+                                </div>
+                                <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Actions -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-4">Aksi Cepat</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <button id="quickClockIn" class="main-action-btn bg-green-500 hover:bg-green-600 text-white p-6 rounded-xl font-semibold text-lg">
+                                <div class="flex items-center justify-center space-x-3">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                    </svg>
+                                    <span>Clock In</span>
+                                </div>
+                            </button>
+                            
+                            <button id="quickClockOut" class="main-action-btn bg-red-500 hover:bg-red-600 text-white p-6 rounded-xl font-semibold text-lg">
+                                <div class="flex items-center justify-center space-x-3">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                    </svg>
+                                    <span>Clock Out</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Activity -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-4">Aktivitas Terbaru</h3>
+                        <div class="space-y-4" id="recentActivity">
+                            <p class="text-gray-500 text-center py-8">Belum ada aktivitas</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Attendance Section -->
+                <div id="attendance" class="section hidden">
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-bold text-primary-500 mb-2">Absen Kehadiran</h2>
+                        <p class="text-gray-600">Kelola kehadiran dan jam kerja Anda</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Clock In/Out -->
+                        <div class="bg-white rounded-2xl shadow-lg p-6">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-4">Clock In / Clock Out</h3>
+                            
+                            <div class="text-center mb-6">
+                                <div class="text-4xl font-mono font-bold text-gray-900" id="currentTime">00:00:00</div>
+                                <div class="text-gray-500" id="currentDate">Senin, 1 Januari 2025</div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <button id="clockInBtn" class="w-full bg-green-500 hover:bg-green-600 text-white py-4 rounded-xl font-semibold text-lg transition-all duration-200">
+                                    Clock In
+                                </button>
+                                
+                                <button id="clockOutBtn" class="w-full bg-red-500 hover:bg-red-600 text-white py-4 rounded-xl font-semibold text-lg transition-all duration-200">
+                                    Clock Out
+                                </button>
+                            </div>
+                            
+                            <div class="mt-6 p-4 bg-gray-50 rounded-xl">
+                                <p class="text-sm text-gray-600">Status saat ini: <span class="font-semibold" id="attendanceStatus">Belum absen</span></p>
+                            </div>
+                        </div>
+                        
+                        <!-- Today's Summary -->
+                        <div class="bg-white rounded-2xl shadow-lg p-6">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-4">Ringkasan Hari Ini</h3>
+                            
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                    <span class="text-gray-600">Jam Masuk</span>
+                                    <span class="font-semibold" id="checkInTime">-</span>
+                                </div>
+                                
+                                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                    <span class="text-gray-600">Jam Keluar</span>
+                                    <span class="font-semibold" id="checkOutTime">-</span>
+                                </div>
+                                
+                                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                    <span class="text-gray-600">Total Jam Kerja</span>
+                                    <span class="font-semibold" id="totalHours">0 jam</span>
+                                </div>
+                                
+                                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                    <span class="text-gray-600">Overtime</span>
+                                    <span class="font-semibold" id="overtime">0 jam</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Leave Management Section -->
+                <div id="leave" class="section hidden">
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-bold text-primary-500 mb-2">Manajemen Cuti</h2>
+                        <p class="text-gray-600">Kelola permintaan cuti dan izin</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Leave Request Form -->
+                        <div class="bg-white rounded-2xl shadow-lg p-6">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-4">Ajukan Cuti</h3>
+                            
+                            <form id="leaveForm" class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Cuti</label>
+                                    <select id="leaveType" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                        <option value="">Pilih jenis cuti</option>
+                                        <option value="annual">Cuti Tahunan</option>
+                                        <option value="sick">Cuti Sakit</option>
+                                        <option value="emergency">Cuti Darurat</option>
+                                        <option value="maternity">Cuti Melahirkan</option>
+                                        <option value="other">Lainnya</option>
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Mulai</label>
+                                    <input type="date" id="leaveStartDate" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Selesai</label>
+                                    <input type="date" id="leaveEndDate" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Alasan</label>
+                                    <textarea id="leaveReason" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent" placeholder="Jelaskan alasan cuti..."></textarea>
+                                </div>
+                                
+                                <button type="submit" class="w-full bg-primary-500 text-white py-3 px-4 rounded-xl font-semibold hover:bg-primary-700 transition-all duration-200">
+                                    Ajukan Cuti
+                                </button>
+                            </form>
+                        </div>
+                        
+                        <!-- Leave Balance & History -->
+                        <div class="space-y-6">
+                            <div class="bg-white rounded-2xl shadow-lg p-6">
+                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Sisa Cuti</h3>
+                                
+                                <div class="space-y-3">
+                                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                        <span class="text-gray-600">Cuti Tahunan</span>
+                                        <span class="font-semibold text-green-600" id="annualLeaveBalance">12 hari</span>
+                                    </div>
+                                    
+                                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                        <span class="text-gray-600">Cuti Sakit</span>
+                                        <span class="font-semibold text-blue-600" id="sickLeaveBalance">5 hari</span>
+                                    </div>
+                                    
+                                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                        <span class="text-gray-600">Cuti Darurat</span>
+                                        <span class="font-semibold text-yellow-600" id="emergencyLeaveBalance">3 hari</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white rounded-2xl shadow-lg p-6">
+                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Riwayat Cuti</h3>
+                                
+                                <div class="space-y-3" id="leaveHistory">
+                                    <p class="text-gray-500 text-center py-8">Belum ada riwayat cuti</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reports Section -->
+                <div id="reports" class="section hidden">
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-bold text-primary-500 mb-2">Laporan Kehadiran</h2>
+                        <p class="text-gray-600">Lihat dan unduh laporan kehadiran</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-2xl shadow-lg p-6">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-4 md:mb-0">Filter Laporan</h3>
+                            
+                            <div class="flex space-x-4">
+                                <button id="exportExcel" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                                    Export Excel
+                                </button>
+                                <button id="exportPDF" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                                    Export PDF
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Mulai</label>
+                                <input type="date" id="reportStartDate" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Selesai</label>
+                                <input type="date" id="reportEndDate" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">User</label>
+                                <select id="reportUser" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                    <option value="all">Semua User</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                                <select id="reportStatus" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                    <option value="all">Semua Status</option>
+                                    <option value="present">Hadir</option>
+                                    <option value="absent">Absen</option>
+                                    <option value="late">Terlambat</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <button id="generateReport" class="bg-primary-500 hover:bg-primary-700 text-white px-6 py-2 rounded-lg font-medium transition-colors mb-6">
+                            Tampilkan Laporan
+                        </button>
+                        
+                        <div class="overflow-x-auto">
+                            <table class="w-full table-auto">
+                                <thead>
+                                    <tr class="bg-gray-50">
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Tanggal</th>
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">User</th>
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Jam Masuk</th>
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Jam Keluar</th>
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Total Jam</th>
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="reportTableBody">
+                                    <tr>
+                                        <td colspan="6" class="px-4 py-8 text-center text-gray-500">
+                                            Pilih filter dan klik "Tampilkan Laporan"
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Management Section (Admin Only) -->
+                <div id="users" class="section hidden">
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-bold text-primary-500 mb-2">Kelola Staff</h2>
+                        <p class="text-gray-600">Kelola akun staff dan hak akses</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-semibold text-gray-900">Daftar Karyawan</h3>
+                            <button id="addUserBtn" class="bg-primary-500 hover:bg-primary-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                                Tambah Staff
+                            </button>
+                        </div>
+                        
+                        <div class="overflow-x-auto">
+                            <table class="w-full table-auto">
+                                <thead>
+                                    <tr class="bg-gray-50">
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Nama</th>
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Username</th>
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Position</th>
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Status</th>
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="userTableBody">
+                                    <tr>
+                                        <td colspan="5" class="px-4 py-8 text-center text-gray-500">
+                                            Memuat data...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobileMenuOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden md:hidden">
+        <div class="fixed left-0 top-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300" id="mobileMenu">
+            <div class="p-4 border-b border-gray-200">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-900">Menu</h3>
+                    <button id="closeMobileMenu" class="p-2 rounded-lg hover:bg-gray-100">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="p-4 space-y-2" id="mobileNav">
+                <!-- Mobile navigation items will be copied here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit User Modal -->
+    <div id="userModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-md w-full max-h-screen overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-semibold text-primary-500" id="userModalTitle">Tambah Staff</h3>
+                    <button id="closeUserModal" class="p-2 rounded-lg hover:bg-gray-100">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <form id="userForm" class="space-y-4">
+                    <input type="hidden" id="userId">
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
+                        <input type="text" id="userFullName" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+                        <input type="text" id="userUsername" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                        <input type="password" id="userPassword" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                        <p class="text-xs text-gray-500 mt-1">Kosongkan jika tidak ingin mengubah password</p>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Role</label>
+                        <select id="userRole" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            <option value="employee">Employee</option>
+                            <option value="admin">Administrator</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                        <select id="userStatus" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            <option value="active">Aktif</option>
+                            <option value="inactive">Nonaktif</option>
+                        </select>
+                    </div>
+                    
+                    <div class="flex space-x-4 pt-4">
+                        <button type="submit" class="flex-1 bg-primary-500 text-white py-3 px-4 rounded-xl font-semibold hover:bg-primary-700 transition-colors">
+                            Simpan
+                        </button>
+                        <button type="button" id="cancelUserModal" class="flex-1 bg-gray-500 text-white py-3 px-4 rounded-xl font-semibold hover:bg-gray-600 transition-colors">
+                            Batal
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="demo-data.js"></script>
+    <script src="app.js"></script>
+    
+    <!-- PWA Service Worker Registration -->
+    <script>
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then((registration) => {
+                        console.log('SW registered: ', registration);
+                        
+                        // Check for updates
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    // New content available
+                                    if (confirm('Update tersedia! Muat ulang untuk menggunakan versi terbaru?')) {
+                                        window.location.reload();
+                                    }
+                                }
+                            });
+                        });
+                    })
+                    .catch((registrationError) => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+
+        // PWA Install Prompt
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Show custom install button
+            const installBanner = document.getElementById('installBanner');
+            if (installBanner) {
+                installBanner.style.display = 'block';
+            }
+        });
+
+        // Handle app install
+        window.addEventListener('appinstalled', () => {
+            console.log('PWA was installed');
+            const installBanner = document.getElementById('installBanner');
+            if (installBanner) {
+                installBanner.style.display = 'none';
+            }
+        });
+
+        // Install button handler
+        document.addEventListener('DOMContentLoaded', () => {
+            const installBtn = document.getElementById('installBtn');
+            const dismissBtn = document.getElementById('dismissInstall');
+            
+            if (installBtn) {
+                installBtn.addEventListener('click', async () => {
+                    if (deferredPrompt) {
+                        deferredPrompt.prompt();
+                        const { outcome } = await deferredPrompt.userChoice;
+                        console.log(`User response to install prompt: ${outcome}`);
+                        deferredPrompt = null;
+                        
+                        // Hide banner after install attempt
+                        const installBanner = document.getElementById('installBanner');
+                        if (installBanner) {
+                            installBanner.style.display = 'none';
+                        }
+                    }
+                });
+            }
+            
+            if (dismissBtn) {
+                dismissBtn.addEventListener('click', () => {
+                    const installBanner = document.getElementById('installBanner');
+                    if (installBanner) {
+                        installBanner.style.display = 'none';
+                    }
+                });
+            }
+        });
+
+        // Check if app is running in standalone mode
+        if (window.matchMedia('(display-mode: standalone)').matches) {
+            console.log('Running in standalone mode');
+        }
+    </script>
+</body>
+</html>

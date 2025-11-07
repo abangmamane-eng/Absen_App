@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="48" cy="48" r="44" fill="#1B4332" stroke="#52B788" stroke-width="4"/>
+  
+  <!-- Clock face -->
+  <circle cx="48" cy="48" r="28" fill="#FFFFFF" stroke="#1B4332" stroke-width="2"/>
+  
+  <!-- Clock hands -->
+  <!-- Hour hand -->
+  <line x1="48" y1="48" x2="48" y2="28" stroke="#1B4332" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Minute hand -->
+  <line x1="48" y1="48" x2="36" y2="38" stroke="#1B4332" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- Center dot -->
+  <circle cx="48" cy="48" r="3" fill="#1B4332"/>
+  
+  <!-- Minus sign for clock out -->
+  <path d="M44 22 L52 22" stroke="#FF6B6B" stroke-width="3" stroke-linecap="round"/>
+</svg>

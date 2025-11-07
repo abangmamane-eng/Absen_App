@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="250" fill="#1B4332" stroke="#52B788" stroke-width="8"/>
+  
+  <!-- Coffee cup body -->
+  <rect x="160" y="180" width="192" height="140" rx="12" fill="#FFFFFF" stroke="#1B4332" stroke-width="4"/>
+  
+  <!-- Coffee surface -->
+  <rect x="168" y="188" width="176" height="40" rx="8" fill="#8B4513"/>
+  
+  <!-- Coffee steam (left) -->
+  <path d="M200 160 Q190 150 200 140 Q210 130 200 120" stroke="#95D5B2" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M210 160 Q200 150 210 140 Q220 130 210 120" stroke="#95D5B2" stroke-width="3" fill="none" stroke-linecap="round"/>
+  
+  <!-- Coffee steam (right) -->
+  <path d="M320 160 Q330 150 320 140 Q310 130 320 120" stroke="#95D5B2" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M310 160 Q320 150 310 140 Q300 130 310 120" stroke="#95D5B2" stroke-width="3" fill="none" stroke-linecap="round"/>
+  
+  <!-- Cup handle (left) -->
+  <ellipse cx="140" cy="250" rx="20" ry="35" fill="none" stroke="#1B4332" stroke-width="8"/>
+  <ellipse cx="140" cy="250" rx="12" ry="25" fill="none" stroke="#FFFFFF" stroke-width="4"/>
+  
+  <!-- Cup handle (right) -->
+  <ellipse cx="372" cy="250" rx="20" ry="35" fill="none" stroke="#1B4332" stroke-width="8"/>
+  <ellipse cx="372" cy="250" rx="12" ry="25" fill="none" stroke="#FFFFFF" stroke-width="4"/>
+  
+  <!-- Coffee beans decoration -->
+  <circle cx="190" cy="230" r="8" fill="#8B4513"/>
+  <circle cx="210" cy="250" r="6" fill="#8B4513"/>
+  <circle cx="230" cy="235" r="7" fill="#8B4513"/>
+  <circle cx="280" cy="245" r="6" fill="#8B4513"/>
+  <circle cx="300" cy="230" r="8" fill="#8B4513"/>
+  <circle cx="320" cy="250" r="6" fill="#8B4513"/>
+</svg>
