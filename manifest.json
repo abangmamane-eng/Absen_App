@@ -1,0 +1,116 @@
+{
+  "name": "Kopi Toko Makmur - Sistem Absen Barista",
+  "short_name": "Kopi Makmur",
+  "description": "Aplikasi absen kehadiran untuk barista Kopi Toko Makmur",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1B4332",
+  "theme_color": "#1B4332",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "id",
+  "dir": "ltr",
+  "categories": ["business", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "icons/makmur-pwa-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "icons/makmur-pwa-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "icons/makmur-pwa-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "icons/makmur-pwa-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "icons/makmur-pwa-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "icons/makmur-pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "icons/makmur-pwa-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "icons/makmur-pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Absen Masuk",
+      "short_name": "Clock In",
+      "description": "Catat waktu masuk kerja",
+      "url": "/#clockin",
+      "icons": [
+        {
+          "src": "icons/clockin-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Absen Keluar",
+      "short_name": "Clock Out",
+      "description": "Catat waktu keluar kerja",
+      "url": "/#clockout",
+      "icons": [
+        {
+          "src": "icons/clockout-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "Lihat ringkasan absen",
+      "url": "/#dashboard",
+      "icons": [
+        {
+          "src": "icons/dashboard-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshots/mobile-login.png",
+      "sizes": "375x812",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "screenshots/mobile-dashboard.png",
+      "sizes": "375x812",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ]
+}
